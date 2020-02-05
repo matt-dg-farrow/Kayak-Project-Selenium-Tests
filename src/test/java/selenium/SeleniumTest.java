@@ -21,23 +21,22 @@ import selenium.pages.RentPage;
 
 public class SeleniumTest {
 
-	
 	private int port;
-	
+
 	private String context;
-	
+
 	private WebDriver driver;
 
 	private List<String> custInfo = new ArrayList<>();
-	
+
 	private HomePage homePage = new HomePage(driver);
 	private RentPage rentPage = new RentPage(driver);
-	
+
 	@Before
 	public void setup() {
 		System.setProperty("webdriver.chrome.driver", "chromedriver");
 		ChromeOptions options = new ChromeOptions();
-	//	options.setHeadless(true);
+		options.setHeadless(true);
 		this.driver = new ChromeDriver(options);
 		this.driver.manage().window().maximize();
 		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -55,35 +54,32 @@ public class SeleniumTest {
 	public void teardown() {
 		driver.quit();
 	}
-	
-	private String address = "3.10.143.120";
-//			"3.9.36.142";
+
+	private String address = "localhost";
+	// "3.10.143.120";
 
 	@Test
 	public void seleniumTest() throws InterruptedException {
 		this.driver.get("http://" + address);
-		
-		WebDriverWait wait = new WebDriverWait(driver,30);
 
-		
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+
 		homePage.createCustomer(custInfo);
 		wait.until(ExpectedConditions.alertIsPresent());
 		assertEquals("Customer created.", homePage.readAlertText());
 		homePage.alertOK();
-		
-		
+
 		wait.until(ExpectedConditions.textToBe(By.id("capacity"), "1/300"));
-		assertEquals("1/300",  homePage.getCapacity());
+		assertEquals("1/300", homePage.getCapacity());
 		driver.get("http://" + address + "/rent.html");
-		
-		
+
 		rentPage.searchCustomer("Smith");
 		rentPage.selectCustomer();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("kayak")));
 		rentPage.pickAllEquipment();
 		wait.until(ExpectedConditions.textToBe(By.id("total-price"), "Total Price: £125.00"));
 		assertEquals("Total Price: £125.00", rentPage.getTotalPrice());
-		
+
 		rentPage.saveEquipment();
 		wait.until(ExpectedConditions.alertIsPresent());
 		assertEquals("Customer Bill Smith's equipment saved.", rentPage.readAlertText());
@@ -93,21 +89,19 @@ public class SeleniumTest {
 		assertEquals("19", rentPage.getBAStock());
 		assertEquals("19", rentPage.getHelmetStock());
 		assertEquals("19", rentPage.getPaddleStock());
-		
-		
+
 		this.driver.get("http://" + address + "/index.html");
-		
-		
+
 		homePage.searchCustomer("Smith");
 		homePage.selectCustomer();
-		
+
 		homePage.deleteOneCustomer();
 		wait.until(ExpectedConditions.alertIsPresent());
 		homePage.alertOK();
 		wait.until(ExpectedConditions.alertIsPresent());
 		assertEquals("Customer deleted.", homePage.readAlertText());
 		homePage.alertOK();
-		
+
 //		homePage.createTenCustomers(custInfo);
 //		homePage.deleteAllCustomers();
 //		wait.until(ExpectedConditions.alertIsPresent());
@@ -122,12 +116,10 @@ public class SeleniumTest {
 //		
 //		homePage.create100Customers(custInfo);
 //		assertEquals("rgba(255, 0, 0, 1)", homePage.getSafetyCircleColour());
-		
+
 		homePage.deleteAllCustomers();
 		wait.until(ExpectedConditions.alertIsPresent());
 		homePage.alertOK();
 	}
 
 }
-	
-

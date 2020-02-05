@@ -9,7 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class RentPage extends Page {
 
-	public static final String URL = "http://3.10.143.120/KayakProject/rent.html";
+	public static final String URL = "http://localhost/KayakProject/rent.html";
 		
 		//this will be useful for testing own front-end of project, it may be slower and more bulky to create a class for each page, but it is more readable.
 		//on this note, a class MUST be created for each page being used.
